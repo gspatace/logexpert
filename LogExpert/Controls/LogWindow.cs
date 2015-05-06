@@ -15,6 +15,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Collections;
 using WeifenLuo.WinFormsUI.Docking;
+using System.Linq;
 
 namespace LogExpert
 {
@@ -157,8 +158,15 @@ namespace LogExpert
             FileName = fileName;
             ForcePersistenceLoading = forcePersistenceLoading;
 
+            selectedDataGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            selectedDataGridView.DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopLeft;
+            selectedDataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+
+            selectedDataGridView.SelectionChanged += selectedDataGridView_SelectionChanged;
+
             dataGridView.CellValueNeeded += DataGridView_CellValueNeeded;
             dataGridView.CellPainting += DataGridView_CellPainting;
+            dataGridView.SelectionChanged += DataGridView_NewSelectionChanged;
 
             filterGridView.CellValueNeeded += FilterGridView_CellValueNeeded;
             filterGridView.CellPainting += FilterGridView_CellPainting;
@@ -2093,6 +2101,52 @@ namespace LogExpert
                 {
                     StatusLineText("");
                 }
+            }
+        }
+
+        void selectedDataGridView_SelectionChanged(Object sender, EventArgs e)
+        {
+            selectedDataGridView.ClearSelection();
+        }
+
+        public void DataGridView_NewSelectionChanged(object sender, EventArgs e)
+        {
+            if (dataGridView.SelectedRows.Count == 1)
+            {
+                UpdateSelectedViewColumns();
+
+                var selectedRow = dataGridView.SelectedRows[0];
+                var testRow = new List<string>();
+
+                for (int i = 0; i < selectedDataGridView.ColumnCount; i++)
+                {
+                    testRow.Add(ProcessTextForSelectedView(selectedRow.Cells[i].Value.ToString()));
+                }
+
+                selectedDataGridView.Rows.Add(testRow.ToArray());
+            }
+        }
+
+        public string ProcessTextForSelectedView(string value)
+        {
+            return value.Replace(@"/\", Environment.NewLine);
+        }
+
+        public void UpdateSelectedViewColumns()
+        {
+            selectedDataGridView.ColumnCount = dataGridView.ColumnCount;
+
+            for (int i = 0; i < selectedDataGridView.ColumnCount; i++)
+            {
+                var column = selectedDataGridView.Columns[i];
+
+                column.HeaderText = dataGridView.Columns[i].HeaderText;
+                column.Name = dataGridView.Columns[i].Name;
+            }
+
+            while (selectedDataGridView.Rows.Count > 0)
+            {
+                selectedDataGridView.Rows.RemoveAt(0);
             }
         }
 
