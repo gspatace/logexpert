@@ -2109,6 +2109,11 @@ namespace LogExpert
             selectedDataGridView.ClearSelection();
         }
 
+        public void ClearSelectedView()
+        {
+            UpdateSelectedViewColumns();
+        }
+
         public void DataGridView_NewSelectionChanged(object sender, EventArgs e)
         {
             if (dataGridView.SelectedRows.Count == 1)
@@ -6413,6 +6418,20 @@ namespace LogExpert
                     }
                 }
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var firstLines = new List<string>();
+
+            using (StreamReader reader = new StreamReader(FileName))
+            {
+                firstLines.Add(reader.ReadLine());
+            }
+
+            File.WriteAllLines(FileName, firstLines.ToArray());
+            Reload();
+            ClearSelectedView();
         }
     }
 }
