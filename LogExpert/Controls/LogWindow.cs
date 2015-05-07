@@ -6458,8 +6458,10 @@ namespace LogExpert
 
         public void OutputStackTraceToTempFile()
         {
+            int stacktraceColumn = 5;
+
             var selectedRow = dataGridView.SelectedRows[0];
-            var stackTrace = (string)selectedRow.Cells[4].Value;
+            var stackTrace = (string)selectedRow.Cells[stacktraceColumn].Value;
 
             // Output the stack to a temporary file in case the editor is interested in that as well
             var tempFileDir = System.IO.Path.GetTempPath() + "Unity\\";
@@ -6473,8 +6475,6 @@ namespace LogExpert
 
             var lines = Regex.Split(stackTrace, @"/\\");
             File.WriteAllLines(tempFilePath, lines.ToArray());
-
-            MessageBox.Show(string.Format("Saved to {0}", tempFilePath));
         }
     }
 }
