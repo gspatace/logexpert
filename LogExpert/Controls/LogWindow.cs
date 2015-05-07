@@ -1,4 +1,5 @@
-﻿using LogExpert.Interfaces;
+﻿using System.Diagnostics;
+using LogExpert.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -6432,6 +6433,48 @@ namespace LogExpert
             File.WriteAllLines(FileName, firstLines.ToArray());
             Reload();
             ClearSelectedView();
+        }
+
+        void openInVimToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (dataGridView.SelectedRows.Count != 1)
+            {
+                return;
+            }
+
+            OutputStackTraceToTempFile();
+            OpenVim();
+        }
+
+        public void OpenVim()
+        {
+            var startInfo = new ProcessStartInfo();
+
+            startInfo.FileName = "C:/Utils/Python34/python.exe";
+            startInfo.Arguments = string.Format("C:/Users/Steve/.vim/bundle/vim-config/Ave/Scripts/Python/OpenGvim.py \"{0}\" 1 \"call QuickFixHelper#PopulateQuickFixFromUnityStack()\"", FileName);
+
+            Process.Start(startInfo);
+        }
+
+        public void OutputStackTraceToTempFile()
+        {
+            var selectedRow = dataGridView.SelectedRows[0];
+            var stackTrace = (string)selectedRow.Cells[4].Value;
+
+            // Output the stack to a temporary file in case the editor is interested in that as well
+            var tempFileDir = System.IO.Path.GetTempPath() + "Unity\\";
+
+            if (!Directory.Exists(tempFileDir))
+            {
+                Directory.CreateDirectory(tempFileDir);
+            }
+
+            var tempFilePath = tempFileDir + "logstack.tmp";
+
+            var lines = Regex.Split(stackTrace, @"/\\");
+            File.WriteAllLines(tempFilePath, lines.ToArray());
+
+            MessageBox.Show(string.Format("Saved to {0}", tempFilePath));
         }
     }
 }

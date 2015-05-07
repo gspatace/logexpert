@@ -126,6 +126,7 @@ namespace LogExpert
             this.filterForSelectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setSelectedTextAsBookmarkCommentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.openInVimToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -203,7 +204,7 @@ namespace LogExpert
             this.tableLayoutPanel1.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 194F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 195F));
             this.tableLayoutPanel1.Controls.Add(this.columnFinderPanel, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.dataGridView, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.timeSpreadingControl1, 1, 1);
@@ -297,6 +298,7 @@ namespace LogExpert
             this.copyToTabToolStripMenuItem,
             this.toolStripSeparator1,
             this.scrollAllTabsToTimestampToolStripMenuItem,
+            this.openInVimToolStripMenuItem,
             this.syncTimestampsToToolStripMenuItem,
             this.freeThisWindowFromTimeSyncToolStripMenuItem,
             this.locateLineInOriginalFileToolStripMenuItem,
@@ -309,7 +311,7 @@ namespace LogExpert
             this.markCurrentFilterRangeToolStripMenuItem,
             this.pluginSeparator});
             this.dataGridContextMenuStrip.Name = "dataGridContextMenuStrip";
-            this.dataGridContextMenuStrip.Size = new System.Drawing.Size(287, 270);
+            this.dataGridContextMenuStrip.Size = new System.Drawing.Size(287, 314);
             this.dataGridContextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.DataGridContextMenuStrip_Opening);
             // 
             // copyToolStripMenuItem
@@ -442,7 +444,7 @@ namespace LogExpert
             | System.Windows.Forms.AnchorStyles.Right)));
             this.timeSpreadingControl1.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.timeSpreadingControl1.ForeColor = System.Drawing.Color.Teal;
-            this.timeSpreadingControl1.Location = new System.Drawing.Point(1026, 30);
+            this.timeSpreadingControl1.Location = new System.Drawing.Point(1027, 30);
             this.timeSpreadingControl1.Margin = new System.Windows.Forms.Padding(2, 0, 1, 0);
             this.timeSpreadingControl1.Name = "timeSpreadingControl1";
             this.timeSpreadingControl1.ReverseAlpha = false;
@@ -1207,6 +1209,13 @@ namespace LogExpert
             this.setSelectedTextAsBookmarkCommentToolStripMenuItem.Text = "Set selected text as bookmark comment";
             this.setSelectedTextAsBookmarkCommentToolStripMenuItem.Click += new System.EventHandler(this.SetSelectedTextAsBookmarkCommentToolStripMenuItem_Click);
             // 
+            // openInVimToolStripMenuItem
+            // 
+            this.openInVimToolStripMenuItem.Name = "openInVimToolStripMenuItem";
+            this.openInVimToolStripMenuItem.Size = new System.Drawing.Size(286, 22);
+            this.openInVimToolStripMenuItem.Text = "Open In Vim";
+            this.openInVimToolStripMenuItem.Click += new System.EventHandler(this.openInVimToolStripMenuItem_Click);
+            // 
             // LogWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1360,5 +1369,6 @@ namespace LogExpert
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.DataGridView selectedDataGridView;
         private System.Windows.Forms.Button clearButton;
+        private System.Windows.Forms.ToolStripMenuItem openInVimToolStripMenuItem;
 	}
 }
