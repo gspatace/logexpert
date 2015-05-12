@@ -168,6 +168,7 @@ namespace LogExpert
             dataGridView.CellValueNeeded += DataGridView_CellValueNeeded;
             dataGridView.CellPainting += DataGridView_CellPainting;
             dataGridView.SelectionChanged += DataGridView_NewSelectionChanged;
+            dataGridView.DoubleClick += DataGridView_DoubleClick;
 
             filterGridView.CellValueNeeded += FilterGridView_CellValueNeeded;
             filterGridView.CellPainting += FilterGridView_CellPainting;
@@ -2113,6 +2114,11 @@ namespace LogExpert
         public void ClearSelectedView()
         {
             UpdateSelectedViewColumns();
+        }
+
+        public void DataGridView_DoubleClick(object sender, EventArgs e)
+        {
+            OpenSelectedRowInVim();
         }
 
         public void DataGridView_NewSelectionChanged(object sender, EventArgs e)
@@ -6437,13 +6443,37 @@ namespace LogExpert
 
         void openInVimToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            OpenSelectedRowInVim();
+        }
+
+        public void OpenSelectedRowInVim()
+        {
             if (dataGridView.SelectedRows.Count != 1)
             {
                 return;
             }
 
-            OutputStackTraceToTempFile();
-            OpenVim();
+            var stackTraceLines = GetStackTraceForSelectedRow();
+
+            if (stackTraceLines != null && stackTraceLines.Count > 0)
+            {
+                OutputStackTraceToTempFile(stackTraceLines);
+                OpenVim();
+            }
+        }
+
+        public void OutputStackTraceToTempFile(List<string> stackTraceLines)
+        {
+            // Output the stack to a temporary file in case the editor is interested in that as well
+            var tempFileDir = System.IO.Path.GetTempPath() + "Unity\\";
+
+            if (!Directory.Exists(tempFileDir))
+            {
+                Directory.CreateDirectory(tempFileDir);
+            }
+
+            var tempFilePath = tempFileDir + "logstack.tmp";
+            File.WriteAllLines(tempFilePath, stackTraceLines.ToArray());
         }
 
         public void OpenVim()
@@ -6456,25 +6486,24 @@ namespace LogExpert
             Process.Start(startInfo);
         }
 
-        public void OutputStackTraceToTempFile()
+        public List<string> GetStackTraceForSelectedRow()
         {
             int stacktraceColumn = 5;
 
             var selectedRow = dataGridView.SelectedRows[0];
             var stackTrace = (string)selectedRow.Cells[stacktraceColumn].Value;
 
-            // Output the stack to a temporary file in case the editor is interested in that as well
-            var tempFileDir = System.IO.Path.GetTempPath() + "Unity\\";
-
-            if (!Directory.Exists(tempFileDir))
+            if (stackTrace == null)
             {
-                Directory.CreateDirectory(tempFileDir);
+                return null;
             }
 
-            var tempFilePath = tempFileDir + "logstack.tmp";
+            if (stackTrace.Trim() == "")
+            {
+                return null;
+            }
 
-            var lines = Regex.Split(stackTrace, @"/\\");
-            File.WriteAllLines(tempFilePath, lines.ToArray());
+            return Regex.Split(stackTrace, @"/\\").Reverse().ToList();
         }
     }
 }
