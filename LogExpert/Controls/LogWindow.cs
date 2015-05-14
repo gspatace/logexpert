@@ -22,6 +22,51 @@ namespace LogExpert
 {
     public partial class LogWindow : DockContent, ILogPaintContext, ILogView, ILogWindowSearch
     {
+        static List<string> IgnoreStackTraceFilePatterns = new List<string>()
+        {
+            @"UnityPreBuilt\\Zenject",
+            @"UnityPreBuilt\\Debugging",
+            @"UnityPreBuilt\\DebuggingUnity",
+        };
+
+        static Regex _stackTraceIgnoreRegex;
+
+        static Regex StackTraceIgnoreRegex
+        {
+            get
+            {
+                if (_stackTraceIgnoreRegex == null)
+                {
+                    _stackTraceIgnoreRegex = TryBuildRegex(IgnoreStackTraceFilePatterns);
+                }
+
+                return _stackTraceIgnoreRegex;
+            }
+        }
+
+
+        public static Regex TryBuildRegex(List<string> patterns)
+        {
+            if (patterns.Count == 0)
+            {
+                return null;
+            }
+
+            string fullPattern = "";
+
+            foreach (var pattern in patterns)
+            {
+                if (fullPattern.Length > 0)
+                {
+                    fullPattern += "|";
+                }
+
+                fullPattern += pattern;
+            }
+
+            return new Regex(fullPattern, RegexOptions.Singleline);
+        }
+
         const int MAX_HISTORY = 30;
         const int MAX_COLUMNIZER_HISTORY = 40;
         const int SPREAD_MAX = 99;
@@ -6453,7 +6498,7 @@ namespace LogExpert
                 return;
             }
 
-            var stackTraceLines = GetStackTraceForSelectedRow();
+            var stackTraceLines = GetFilteredStackTraceForSelectedRow();
 
             if (stackTraceLines != null && stackTraceLines.Count > 0)
             {
@@ -6486,7 +6531,7 @@ namespace LogExpert
             Process.Start(startInfo);
         }
 
-        public List<string> GetStackTraceForSelectedRow()
+        public List<string> GetFilteredStackTraceForSelectedRow()
         {
             int stacktraceColumn = 5;
 
@@ -6503,7 +6548,13 @@ namespace LogExpert
                 return null;
             }
 
-            return Regex.Split(stackTrace, @"/\\").Reverse().ToList();
+            return Regex.Split(stackTrace, @"/\\").Reverse().Where(ShouldIncludeStackTrace).ToList();
+        }
+
+        public bool ShouldIncludeStackTrace(string line)
+        {
+            bool shouldIgnore = StackTraceIgnoreRegex.IsMatch(line);
+            return !shouldIgnore;
         }
     }
 }
