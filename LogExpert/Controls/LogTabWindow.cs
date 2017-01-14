@@ -18,10 +18,11 @@ using System.Resources;
 using System.Runtime.InteropServices;
 using System.Security;
 using WeifenLuo.WinFormsUI.Docking;
+using LogExpert.Classes;
 
 namespace LogExpert
 {
-	public partial class LogTabWindow : Form
+    public partial class LogTabWindow : Form
 	{
 		#region Fields
 
@@ -70,7 +71,9 @@ namespace LogExpert
 		private Thread _statusLineThread;
 
 		private BookmarkWindow _bookmarkWindow;
-		private bool _firstBookmarkWindowShow = true;
+        private bool _firstBookmarkWindowShow = true;
+
+        public WatchDog watchDog;
 
 		#endregion
 
@@ -101,11 +104,21 @@ namespace LogExpert
 
 		private delegate void AddFileTabsDelegate(string[] fileNames);
 
-		#endregion
+        public void OnFileParsed(object soruce, FileSystemEventArgs ea)
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new Action(() => OpenCreatedFile(ea)));
+                return;
+            }
+        }
 
-		#region cTor
 
-		public LogTabWindow(string[] fileNames, int instanceNumber, bool showInstanceNumbers)
+        #endregion
+
+        #region cTor
+
+        public LogTabWindow(string[] fileNames, int instanceNumber, bool showInstanceNumbers)
 		{
 			InitializeComponent();
 			_startupFileNames = fileNames;
@@ -161,6 +174,9 @@ namespace LogExpert
 			Closing += LogTabWindow_Closing;
 
 			InitBookmarkWindow();
+
+            watchDog = new WatchDog();
+            watchDog.NewFile += OnFileParsed;
 		}
 
 		#endregion
@@ -1732,10 +1748,15 @@ namespace LogExpert
 			}
 		}
 
-		#endregion
+        public void OpenCreatedFile(FileSystemEventArgs ea)
+        {
+            AddFileTab(ea.FullPath, false, null, false, null);
+        }
 
-		#region Events
-		private void GuiStateUpdate(object sender, GuiStateArgs e)
+        #endregion
+
+        #region Events
+        private void GuiStateUpdate(object sender, GuiStateArgs e)
 		{
 			BeginInvoke(new GuiStateUpdateWorkerDelegate(GuiStateUpdateWorker), new object[] { e });
 		}
@@ -1775,6 +1796,12 @@ namespace LogExpert
 			{
 				LoadFiles(_startupFileNames, false);
 			}
+
+            if( Preferences.isWatchDogActive == true )
+            {
+                watchDog.EnableRaisingEvents = true;
+            }
+
 			_ledThread = new Thread(new ThreadStart(LedThreadProc));
 			_ledThread.IsBackground = true;
 			_ledThread.Start();

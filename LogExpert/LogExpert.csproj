@@ -59,6 +59,7 @@
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -68,6 +69,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Accessibility" />
@@ -88,6 +90,9 @@
     <Compile Include="Classes\DamerauLevenshtein.cs" />
     <Compile Include="Classes\FuzzyBlockDetection.cs" />
     <Compile Include="Classes\LogExpertCallback.cs" />
+    <Compile Include="Classes\WatchDog.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Classes\YetiLevenshtein.cs" />
     <Compile Include="Controls\BaseLogWindow.cs">
       <SubType>Form</SubType>

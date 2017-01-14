@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Runtime.InteropServices;
+using LogExpert.Classes;
 
 namespace LogExpert.Dialogs
 {
@@ -126,6 +127,22 @@ namespace LogExpert.Dialogs
 			this.maskPrioCheckBox.Checked = this.Preferences.maskPrio;
 			this.columnFinderCheckBox.Checked = this.Preferences.showColumnFinder;
 			this.legacyReaderCheckBox.Checked = this.Preferences.useLegacyReader;
+
+            if(this.Preferences.isWatchDogActive == true)
+            {
+                watchDogActiveCB.Checked = true;
+                watchDogPathEntry.Enabled = true;
+            }
+            else
+            {
+                watchDogActiveCB.Checked = false;
+                watchDogPathEntry.Enabled = false;
+            }
+
+            if(this.Preferences.watchDogPath != null)
+            {
+                watchDogPathEntry.Text = this.Preferences.watchDogPath;
+            }
 		}
 
 		private string NotNull(string text)
@@ -836,5 +853,28 @@ namespace LogExpert.Dialogs
 				MessageBox.Show(this, "Settings imported", "LogExpert");
 			}
 		}
-	}
+
+        private void watchDogActiveCB_CheckedChanged(object sender, EventArgs e)
+        {
+            if( watchDogActiveCB.Checked == true )
+            {
+                this.Preferences.isWatchDogActive = true;
+                watchDogPathEntry.Enabled = true;
+                logTabWin.watchDog.EnableRaisingEvents = true;
+                
+            }
+            else if (watchDogActiveCB.Checked == false )
+            {
+                this.Preferences.isWatchDogActive = false;
+                watchDogPathEntry.Enabled = false;
+                logTabWin.watchDog.EnableRaisingEvents = false;
+            }
+        }
+
+        private void watchDogPathEntry_Leave(object sender, EventArgs e)
+        {
+            //TODO validate here path
+            this.Preferences.watchDogPath = watchDogPathEntry.Text;
+        }
+    }
 }

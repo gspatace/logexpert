@@ -178,6 +178,8 @@ namespace LogExpert
 		public String defaultEncoding;
 		public bool showColumnFinder;
 		public bool useLegacyReader;
+        public bool isWatchDogActive = false;
+        public string watchDogPath = null;
 	}
 
 	[FlagsAttribute]
