@@ -898,6 +898,11 @@ namespace LogExpert.Dialogs
             this.Preferences.watchDogPath = watchDogPathEntry.Text;
             logTabWin.watchDog.Path = this.Preferences.watchDogPath;
             pathErrorProvider.Clear();
+
+            if (watchDogActiveCB.Checked)
+            {
+                logTabWin.watchDog.EnableRaisingEvents = true;
+            }
         }
 
         private void watchDogPattern_leave(object sender, EventArgs e)
