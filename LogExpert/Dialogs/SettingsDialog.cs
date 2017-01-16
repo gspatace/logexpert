@@ -870,15 +870,20 @@ namespace LogExpert.Dialogs
                 this.Preferences.isWatchDogActive = true;
                 watchDogPathEntry.Enabled = true;
                 watchDogPatternTextBox.Enabled = true;
-                logTabWin.watchDog.EnableRaisingEvents = true;
-                
+                if (!logTabWin.watchDog.Path.Equals(""))
+                {
+                    logTabWin.watchDog.EnableRaisingEvents = true;
+                }
             }
             else if (watchDogActiveCB.Checked == false )
             {
                 this.Preferences.isWatchDogActive = false;
                 watchDogPathEntry.Enabled = false;
                 watchDogPatternTextBox.Enabled = false;
-                logTabWin.watchDog.EnableRaisingEvents = false;
+                if (!logTabWin.watchDog.Path.Equals(""))
+                {
+                    logTabWin.watchDog.EnableRaisingEvents = false;
+                }
             }
         }
 

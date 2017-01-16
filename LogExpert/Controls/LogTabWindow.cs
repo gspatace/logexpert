@@ -1799,7 +1799,10 @@ namespace LogExpert
 
             if( Preferences.isWatchDogActive == true )
             {
-                watchDog.EnableRaisingEvents = true;
+                if(!watchDog.Path.Equals(""))
+                {
+                    watchDog.EnableRaisingEvents = true;
+                }
             }
 
 			_ledThread = new Thread(new ThreadStart(LedThreadProc));
