@@ -148,6 +148,9 @@
             this.importButton = new System.Windows.Forms.Button();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.patternLabel = new System.Windows.Forms.Label();
+            this.watchDogPatternTextBox = new System.Windows.Forms.TextBox();
+            this.pathErrorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox6.SuspendLayout();
@@ -182,6 +185,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.linesPerBlockUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.blockCountUpDown)).BeginInit();
             this.tabPage4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pathErrorProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -1373,6 +1377,8 @@
             // 
             // tabPage4
             // 
+            this.tabPage4.Controls.Add(this.watchDogPatternTextBox);
+            this.tabPage4.Controls.Add(this.patternLabel);
             this.tabPage4.Controls.Add(this.watchDogLabel);
             this.tabPage4.Controls.Add(this.watchDogPathEntry);
             this.tabPage4.Controls.Add(this.watchDogActiveCB);
@@ -1397,7 +1403,7 @@
             // 
             this.watchDogPathEntry.Location = new System.Drawing.Point(129, 47);
             this.watchDogPathEntry.Name = "watchDogPathEntry";
-            this.watchDogPathEntry.Size = new System.Drawing.Size(100, 20);
+            this.watchDogPathEntry.Size = new System.Drawing.Size(291, 20);
             this.watchDogPathEntry.TabIndex = 1;
             this.watchDogPathEntry.Leave += new System.EventHandler(this.watchDogPathEntry_Leave);
             // 
@@ -1472,6 +1478,27 @@
             this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
             this.dataGridViewTextBoxColumn2.Width = 259;
             // 
+            // patternLabel
+            // 
+            this.patternLabel.AutoSize = true;
+            this.patternLabel.Location = new System.Drawing.Point(49, 78);
+            this.patternLabel.Name = "patternLabel";
+            this.patternLabel.Size = new System.Drawing.Size(44, 13);
+            this.patternLabel.TabIndex = 3;
+            this.patternLabel.Text = "Pattern:";
+            // 
+            // watchDogPatternTextBox
+            // 
+            this.watchDogPatternTextBox.Location = new System.Drawing.Point(129, 74);
+            this.watchDogPatternTextBox.Name = "watchDogPatternTextBox";
+            this.watchDogPatternTextBox.Size = new System.Drawing.Size(100, 20);
+            this.watchDogPatternTextBox.TabIndex = 4;
+            this.watchDogPatternTextBox.Leave += new System.EventHandler(this.watchDogPattern_leave);
+            // 
+            // pathErrorProvider
+            // 
+            this.pathErrorProvider.ContainerControl = this;
+            // 
             // SettingsDialog
             // 
             this.AcceptButton = this.okButton;
@@ -1545,6 +1572,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.blockCountUpDown)).EndInit();
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pathErrorProvider)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1669,5 +1697,8 @@
         private System.Windows.Forms.TextBox watchDogPathEntry;
         private System.Windows.Forms.CheckBox watchDogActiveCB;
         private System.Windows.Forms.Label watchDogLabel;
+        private System.Windows.Forms.TextBox watchDogPatternTextBox;
+        private System.Windows.Forms.Label patternLabel;
+        private System.Windows.Forms.ErrorProvider pathErrorProvider;
     }
 }

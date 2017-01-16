@@ -180,6 +180,7 @@ namespace LogExpert
 		public bool useLegacyReader;
         public bool isWatchDogActive = false;
         public string watchDogPath = null;
+	    public string watchDogPattern = null;
 	}
 
 	[FlagsAttribute]
@@ -408,6 +409,10 @@ namespace LogExpert
 				{
 					settings.preferences.defaultEncoding = Encoding.Default.HeaderName;
 				}
+			    if (settings.preferences.watchDogPattern == null)
+			    {
+			        settings.preferences.watchDogPattern = "*.log";
+			    }
 
 				ConvertSettings(settings, Assembly.GetExecutingAssembly().GetName().Version.Build);
 

@@ -12,12 +12,11 @@ namespace LogExpert.Classes
     {
         public WatchDog()
         {
-            ConfigManager cfg = ConfigManager.Instance;
-            bool isActive = ConfigManager.Settings.preferences.isWatchDogActive;
             string path = ConfigManager.Settings.preferences.watchDogPath;
+            string filter = ConfigManager.Settings.preferences.watchDogPattern;
 
             Path = path;
-            Filter = "*.log";
+            Filter = filter;
             NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
             Created += new FileSystemEventHandler(OnChanged);
         }

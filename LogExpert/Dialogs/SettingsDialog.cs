@@ -132,17 +132,26 @@ namespace LogExpert.Dialogs
             {
                 watchDogActiveCB.Checked = true;
                 watchDogPathEntry.Enabled = true;
+                watchDogPatternTextBox.Enabled = true;
             }
             else
             {
                 watchDogActiveCB.Checked = false;
                 watchDogPathEntry.Enabled = false;
+                watchDogPatternTextBox.Enabled = false;
             }
 
             if(this.Preferences.watchDogPath != null)
             {
                 watchDogPathEntry.Text = this.Preferences.watchDogPath;
             }
+
+		    if (this.Preferences.watchDogPattern == null)
+		    {
+		        this.Preferences.watchDogPattern = "*.log";
+		    }
+
+		    watchDogPatternTextBox.Text = this.Preferences.watchDogPattern;
 		}
 
 		private string NotNull(string text)
@@ -860,6 +869,7 @@ namespace LogExpert.Dialogs
             {
                 this.Preferences.isWatchDogActive = true;
                 watchDogPathEntry.Enabled = true;
+                watchDogPatternTextBox.Enabled = true;
                 logTabWin.watchDog.EnableRaisingEvents = true;
                 
             }
@@ -867,14 +877,28 @@ namespace LogExpert.Dialogs
             {
                 this.Preferences.isWatchDogActive = false;
                 watchDogPathEntry.Enabled = false;
+                watchDogPatternTextBox.Enabled = false;
                 logTabWin.watchDog.EnableRaisingEvents = false;
             }
         }
 
         private void watchDogPathEntry_Leave(object sender, EventArgs e)
         {
-            //TODO validate here path
+            if (!Directory.Exists(watchDogPathEntry.Text))
+            {
+                pathErrorProvider.SetError(watchDogPathEntry,"Invalid Path");
+                return;
+            }
+
             this.Preferences.watchDogPath = watchDogPathEntry.Text;
+            logTabWin.watchDog.Path = this.Preferences.watchDogPath;
+            pathErrorProvider.Clear();
+        }
+
+        private void watchDogPattern_leave(object sender, EventArgs e)
+        {
+            this.Preferences.watchDogPattern = watchDogPatternTextBox.Text;
+            logTabWin.watchDog.Filter = this.Preferences.watchDogPattern;
         }
     }
 }
