@@ -8,7 +8,6 @@ namespace LogExpert
 	class XmlLogReader : ILogStreamReader
 	{
 		private PositionAwareStreamReader _reader;
-		private string _endTag = "</log4j:event>";
 		//private const int MAX_BUFFER_LEN = 4096;
 		//private char[] buffer = new char[MAX_BUFFER_LEN];
 		//private int bufferPos = 0;

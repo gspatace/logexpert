@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
@@ -38,6 +39,7 @@ namespace LogExpert
       }
       catch (FormatException fe)
       {
+        Debug.WriteLine(fe.Message);
         this.config.port = 0;
       }
       this.config.password = this.passwordTextBox.Text;
